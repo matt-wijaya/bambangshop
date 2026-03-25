@@ -77,7 +77,13 @@ This is the place for you to write reflections:
 ### Mandatory (Publisher) Reflections
 
 #### Reflection Publisher-1
+1) Di kasus BambangShop, menurut saya, satu Model struct sudah cukup untuk sekarang. Hal ini karena subscriber di konteks ini hanya menyimpan data subscriber dan menjalankan behaviour yang sama untuk semua subscriber, yaitu menerima notifikasi. Hal ini sama dengan mengatakan bahwa ketika semua subsciber punya struct dan behaviour yang sama, interface tidak terlalu dibutuhkan karena kemungkinan adanya modifikasi cukup kecil.  
+Di sisi lain, jika kita meninjau dari Observer Pattern secara konsep atau clean code principle pada dasarnya, interface akan tetap dibutuhkan untuk memenuhi principle di mana suatu code harus extendable (open to changes), di mana jika sewaktu-waktu kita ingin ada banyak subscriber dengan behaviour yang berbeda-beda, kita bisa langsung mengimplementasikannya lewat satu abstraction (dalam konteks ini trait) yang sama.
 
+2) Jika hanya menggunakan Vec, hal ini akan menjadi kurang efisien untuk kasus ini. Dengan menggunakan Vec berarti pengecekan dilakukan secara manual dengan looping id atau url satu persatu. Hal ini sangat memberatkan sistem untuk alokasi yang tidak advanced yang sebenarnya dapat dialokasikan untuk fungsi yang lebih bermutu.  
+Dengan menggunakan DashMap, akan lebih sesuai dengan konteks ini karena sistemnya melakukan pengecekan dengan menggunakan Key, dengan adanya Key, penjagaan id atau url tetap unik juga akan lebih mudah dilakukan, begitu juga dengan add, delete, dan search, karena kita tinggal mengakses berdasarkan key dan mendapatkan pasangannya.
+
+3) Menurut saya, Singleton tidak bisa menggantikan fungsi DashMap, karena keduanya memiliki fungsi yang berbeda. Singleton hanya memastikan hanya ada satu instance dari sebuah objek, sedangkan DashMap digunakan untuk menyimpan data yang digunakan oleh banyak thread. Dengan hanya mengimplementasikan Singleton, kita belum memiliki akses data yang cepat, akses data dengan key, dan thread safety. Dalam konteks ini, akan lebih relevan untuk menggunakan DashMap karena kita juga mmebutuhkan storage yang aman dan efisien untuk banyak SUBSCRIBER, tidak bisa digantikan oleh Singleton, meskipun Singleton dapat digunakan untuk mewrap DashMap tersebut.
 #### Reflection Publisher-2
 
 #### Reflection Publisher-3
